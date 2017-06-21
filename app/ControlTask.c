@@ -88,7 +88,6 @@ void Task_10ms(void)
 void Task_20ms(void)
 {
 		static uint32_t TIME_20MS=0;
-		u8 data[100]={0};
 		float inner_loop_time = (Get_Time_Micros()-TIME_20MS)/1000000.0f;
 		TIME_20MS =Get_Time_Micros(); 
 		GPIO_ToggleBits(GPIOA,GPIO_Pin_5);
