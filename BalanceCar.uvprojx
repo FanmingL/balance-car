@@ -509,6 +509,11 @@
               <FilePath>.\libraries\STLibraries\stm32f4xx_spi.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f4xx_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\libraries\STLibraries\stm32f4xx_dma.c</FilePath>
+            </File>
+            <File>
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\libraries\STLibraries\system_stm32f4xx.c</FilePath>

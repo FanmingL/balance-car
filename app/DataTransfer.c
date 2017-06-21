@@ -109,11 +109,13 @@ void ANO_DT_Send_Senser(s16 a_x,s16 a_y,s16 a_z,s16 g_x,s16 g_y,s16 g_z,s16 m_x,
 void DataTransferTask(u32 sys_time)
 {
 	if (sys_time%10==0){
-	ANO_DT_Send_Status(Roll,Pitch,Yaw,0,0,0);}
+	ANO_DT_Send_Status(Roll,Pitch,Yaw,0,0,0);
+		}
 	else if((sys_time+1)%10==0){
 	ANO_DT_Send_Senser(mpu6050.Acc.x,mpu6050.Acc.y,mpu6050.Acc.z,mpu6050.Gyro.x,
 												mpu6050.Gyro.y,mpu6050.Gyro.z,
 												ak8975.Mag_Val.x,ak8975.Mag_Val.y,ak8975.Mag_Val.z);//mpu6050.Acc.x,mpu6050.Acc.y,mpu6050.Acc.z,mpu6050.Gyro.x
+	
 	}
 	else if((sys_time+2)%10==0)
 	{
