@@ -82,27 +82,13 @@ void USART1_IRQHandler(void)
 	u8 com_data;
 	if( USART_GetITStatus(USART1,USART_IT_RXNE) )
 	{
-		USART_ClearITPendingBit(USART1,USART_IT_RXNE);//??????
-	//	GPIO_ToggleBits(GPIOA,GPIO_Pin_5);
+		USART_ClearITPendingBit(USART1,USART_IT_RXNE);
 		com_data = USART1->DR;
 		Usart1_DataPrepare(com_data);
 
 	}
 
 	
-	
-//	if( USART_GetITStatus(USART1,USART_IT_TXE ) )
-//	{
-//				
-//		USART1->DR = Tx1Buffer[Tx1Counter++]; //?DR??????
-//          
-//		if(Tx1Counter == count1)
-//		{
-//			USART1->CR1 &= ~USART_CR1_TXEIE;		//??TXE(????)??
-//		}
-
-	//	USART_ClearITPendingBit(USART1,USART_IT_TXE);
-//	}
 
 
 

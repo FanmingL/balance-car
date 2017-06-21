@@ -3,7 +3,8 @@
 int main(){
 	All_Init();
 	while(1){
-		if (appTosave){
+		if (appTosave)
+		{
 			appTosave=0;
 			AppParamSave();
 		}
