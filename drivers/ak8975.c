@@ -97,6 +97,7 @@ void ANO_AK8975_CalOffset_Mag(void)
 				Mag_CALIBRATED = 0;
 		//		f.msg_id = 3;
 		//		f.msg_data = 1;
+	
 			}
 		}
 		cnt_m++;

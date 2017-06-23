@@ -72,4 +72,10 @@ void TIM6_DAC_IRQHandler(void)
     }
 
 }
-
+uint32_t GetInnerLoop(int loop)
+{
+	static uint32_t Time[2][20]={0};//Time[0] is the last time, Time[1] is the new time;
+	Time[0][loop] = Time[1][loop];
+	Time[1][loop] = Get_Time_Micros();
+	return Time[1][loop]-Time[0][loop];
+}

@@ -41,19 +41,18 @@ void Encoder_Start(void)
 void Refresh_Encoder(void)
 {
 	int TIM_TIM5,TIM_TIM3;
+	
 	TIM_TIM5 = (short)TIM5 -> CNT; TIM5->CNT=0;
 	TIM_TIM3 = (short)TIM3 -> CNT; TIM3->CNT=0;
 	
-	left_encoder.time_last=left_encoder.time_now;
-	left_encoder.time_now=Get_Time_Micros();
-	right_encoder.time_last=right_encoder.time_now;
-	right_encoder.time_now=Get_Time_Micros();
+	left_encoder.T=((GetInnerLoop(Left_Chassis_Time))/1000000.0f);
+	right_encoder.T=((GetInnerLoop(Right_Chassis_Time))/1000000.0f);
 	
 	left_encoder.encoder_temp = TIM_TIM3*PWMToDegree;
 	right_encoder.encoder_temp = TIM_TIM5*PWMToDegree;
 	
-	left_encoder.speed=ANGLE_TO_RADIAN*TIM_TIM3*PWMToDegree/((left_encoder.time_now-left_encoder.time_last)/1000000.0f);
-	right_encoder.speed=ANGLE_TO_RADIAN*TIM_TIM5*PWMToDegree/((right_encoder.time_now-right_encoder.time_last)/1000000.0f);
+	left_encoder.speed=ANGLE_TO_RADIAN*TIM_TIM3*PWMToDegree/left_encoder.T;
+	right_encoder.speed=ANGLE_TO_RADIAN*TIM_TIM5*PWMToDegree/right_encoder.T;
 	
 	left_encoder.degree += left_encoder.encoder_temp;
 	right_encoder.degree += right_encoder.encoder_temp;

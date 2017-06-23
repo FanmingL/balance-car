@@ -36,9 +36,7 @@ static void ModeTask(void)
 
 void Task_2ms(void)
 {
-	static uint32_t TIME_2MS=0;
-	float inner_loop_time = (Get_Time_Micros()-TIME_2MS)/1000000.0f;
-	TIME_2MS =Get_Time_Micros(); 
+	float inner_loop_time = GetInnerLoop(Task_2ms_Time)/1000000.0f;
 	MPU6050_Read();
 	MPU6050_Data_Prepare( inner_loop_time );
  	IMUupdate(0.5f *inner_loop_time,mpu6050.Gyro_deg.x, mpu6050.Gyro_deg.y, mpu6050.Gyro_deg.z, 
@@ -47,9 +45,7 @@ void Task_2ms(void)
 
 void Task_5ms(void)
 {	
-	static uint32_t TIME_5MS=0;
-	float inner_loop_time = (Get_Time_Micros()-TIME_5MS)/1000000.0f;
-	TIME_5MS =Get_Time_Micros();
+	float inner_loop_time = GetInnerLoop(Task_5ms_Time)/1000000.0f;
 	position_out= -PID_calculate( inner_loop_time,            //周期
 														0,				//前馈
 														exp_angle,				//期望值（设定值）
@@ -78,9 +74,8 @@ void Task_10ms(void)
 
 void Task_20ms(void)
 {
-		static uint32_t TIME_20MS=0;
-		float inner_loop_time = (Get_Time_Micros()-TIME_20MS)/1000000.0f;
-		TIME_20MS =Get_Time_Micros(); 
+	float inner_loop_time = GetInnerLoop(Task_20ms_Time)/1000000.0f;
+			if(!Mag_CALIBRATED)
 		GPIO_ToggleBits(GPIOA,GPIO_Pin_5);
 }
 

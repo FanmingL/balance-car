@@ -8,16 +8,12 @@ typedef struct
 	float speed;
 	float degree;
 	int circle_cnt;
-	u32 time_last;
-	u32 time_now;
 	float T;
 	float encoder_temp;
 }_encoder_st;
 #define Encoder_InitVal {\
 													0.0f,\
 													0.0f,\
-													0,\
-													0,\
 													0,\
 													0.0f,\
 													0.0f}

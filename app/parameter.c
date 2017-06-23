@@ -41,6 +41,7 @@ void Param_SaveMagOffset(xyz_f_t *offset)
 {
  memcpy(&ak8975.Mag_Offset,offset,sizeof(xyz_f_t));
  memcpy(&sensor_setup.Offset.Mag, offset,sizeof(xyz_f_t));
+ appTosave=1;	
 }
 
 void Para_ResetToFactorySetup(void)

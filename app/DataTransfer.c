@@ -210,7 +210,7 @@ void Data_Receive_Anl(u8 *data_buf,u8 num)
 		else if(*(data_buf+4)==0X04)
 		{
 			Mag_CALIBRATED = 1;		
-			appTosave=1;		
+
 		}
 		else if((*(data_buf+4)>=0X021)&&(*(data_buf+4)<=0X26))
 		{
