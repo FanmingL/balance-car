@@ -3,7 +3,7 @@
 
 volatile u8 I2C_FastMode;
 
-void I2c_Soft_delay()
+void I2c_Soft_delay()																//ÓÃÓÚiicµÄdelay
 { 
 	__nop();__nop();__nop();
 	__nop();__nop();__nop();

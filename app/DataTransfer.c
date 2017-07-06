@@ -9,7 +9,8 @@ u8 send_pid1=0,send_pid2=0,send_pid3=0,send_check=0;
 u8 checkdata_to_send,checksum_to_send;
 u8 appTosave=0;
 vs16 ControlMode =0xff;
-
+//各种用于数据传输的函数
+//发送pitch，roll，yaw三个角度到上位机
 void ANO_DT_Send_Status(float angle_rol, float angle_pit, float angle_yaw, s32 alt, u8 fly_model, u8 armed)
 {
 	u8 _cnt=0;
@@ -50,7 +51,7 @@ void ANO_DT_Send_Status(float angle_rol, float angle_pit, float angle_yaw, s32 a
 	
 	Usart2_Send(data_to_send, _cnt);
 }
-
+//发送加速度、角速度、磁力计等传感器的原始数据
 void ANO_DT_Send_Senser(s16 a_x,s16 a_y,s16 a_z,s16 g_x,s16 g_y,s16 g_z,s16 m_x,s16 m_y,s16 m_z)
 {
 	u8 _cnt=0;
@@ -105,7 +106,7 @@ void ANO_DT_Send_Senser(s16 a_x,s16 a_y,s16 a_z,s16 g_x,s16 g_y,s16 g_z,s16 m_x,
 	
 	Usart2_Send(data_to_send, _cnt);
 }
-
+//1ms调用一次数据传输任务
 void DataTransferTask(u32 sys_time)
 {
 	if (sys_time%10==0){
@@ -133,48 +134,48 @@ void DataTransferTask(u32 sys_time)
 
 
 }
-
+//串口1数据解析
 void Usart1_DataPrepare(u8 com_data)
 {
 
 }
-
+//串口2数据解析
 void Usart2_DataPrepare(u8 data)
 {
 	static u8 RxBuffer[50];
 	static u8 _data_len = 0,_data_cnt = 0;
 	static u8 state = 0;
 	
-	if(state==0&&data==0xAA)
+	if(state==0&&data==0xAA)						//判断帧头
 	{
 		state=1;
 		RxBuffer[0]=data;
 	}
-	else if(state==1&&data==0xAF)
+	else if(state==1&&data==0xAF)			//帧头
 	{
 		state=2;
 		RxBuffer[1]=data;
 	}
-	else if(state==2&&data<0XF1)
+	else if(state==2&&data<0XF1)			//帧类型
 	{
 		state=3;
 		RxBuffer[2]=data;
 	}
-	else if(state==3&&data<50)
+	else if(state==3&&data<50)				//帧长
 	{
 		state = 4;
 		RxBuffer[3]=data;
 		_data_len = data;
 		_data_cnt = 0;
 	}
-	else if(state==4&&_data_len>0)
+	else if(state==4&&_data_len>0)		//数据帧
 	{
 		_data_len--;
 		RxBuffer[4+_data_cnt++]=data;
 		if(_data_len==0)
 			state = 5;
 	}
-	else if(state==5)
+	else if(state==5)								//校验帧
 	{
 		state = 0;
 		RxBuffer[4+_data_cnt]=data;
@@ -190,11 +191,11 @@ void Data_Receive_Anl(u8 *data_buf,u8 num)
 {
 	u8 sum = 0;
 	u8 i;
-	for(i=0;i<(num-1);i++)
+	for(i=0;i<(num-1);i++)														//求和校验
 		sum += *(data_buf+i);
-	if(!(sum==*(data_buf+num-1)))		return;		
-	if(!(*(data_buf)==0xAA && *(data_buf+1)==0xAF))		return;	
-	if(*(data_buf+2)==0X01)
+	if(!(sum==*(data_buf+num-1)))		return;						//校验不成功则return
+	if(!(*(data_buf)==0xAA && *(data_buf+1)==0xAF))		return;	//帧头校验不成功则return
+	if(*(data_buf+2)==0X01)														//分析帧类型
 	{
 		if(*(data_buf+4)==0X01)
 		{
@@ -248,7 +249,7 @@ if(*(data_buf+2)==0X02)
 		GPIO_ToggleBits(GPIOA,GPIO_Pin_5);
 	}
 }
-
+//发送PID
 void ANO_DT_Send_PID(u8 group,float p1_p,float p1_i,float p1_d,float p2_p,float p2_i,float p2_d,float p3_p,float p3_i,float p3_d)
 {
 	u8 _cnt=0;

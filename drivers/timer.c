@@ -1,6 +1,6 @@
 #include "main.h"
 /*----TIM2---TIM6-----*/
-void TIM2_Configuration(void)
+void TIM2_Configuration(void)										//TIM2作为系统时钟，CNT寄存器中的为计数开始到现在的微秒数
 {
     TIM_TimeBaseInitTypeDef tim;
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
@@ -13,7 +13,7 @@ void TIM2_Configuration(void)
     TIM_Cmd(TIM2,ENABLE);	
 }
 
-void TIM2_IRQHandler(void)
+void TIM2_IRQHandler(void)										
 {
 	  if (TIM_GetITStatus(TIM2,TIM_IT_Update)!= RESET) 
 		{
@@ -22,7 +22,7 @@ void TIM2_IRQHandler(void)
 		}
 } 
 
-void Delay_us(uint32_t us)
+void Delay_us(uint32_t us)										//用TIM2的计数值来做到精确延时
 {
     uint32_t now = Get_Time_Micros();
     while (Get_Time_Micros() - now < us);
@@ -36,7 +36,7 @@ void Delay_ms(uint32_t ms)
 
 
 
-void TIM6_Configuration(void)
+void TIM6_Configuration(void)							
 {
     TIM_TimeBaseInitTypeDef  tim;
     NVIC_InitTypeDef         nvic;
@@ -62,7 +62,7 @@ void TIM6_Start(void)
     TIM_ITConfig(TIM6, TIM_IT_Update,ENABLE);
     TIM_ClearFlag(TIM6, TIM_FLAG_Update);	
 }
-void TIM6_DAC_IRQHandler(void)
+void TIM6_DAC_IRQHandler(void)									//TIM6的回调函数1ms调用一次，用于精确进入ControlLoop
 {
 	 if (TIM_GetITStatus(TIM6,TIM_IT_Update)!= RESET) 
 	  {
@@ -72,7 +72,7 @@ void TIM6_DAC_IRQHandler(void)
     }
 
 }
-uint32_t GetInnerLoop(int loop)
+uint32_t GetInnerLoop(int loop)								//用于获得精确的函数调用的周期
 {
 	static uint32_t Time[2][20]={0};//Time[0] is the last time, Time[1] is the new time;
 	Time[0][loop] = Time[1][loop];

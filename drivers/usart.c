@@ -80,18 +80,13 @@ void Usart1_Init(u32 br_num)
 void USART1_IRQHandler(void)
 {
 	u8 com_data;
-	if( USART_GetITStatus(USART1,USART_IT_RXNE) )
+	if( USART_GetITStatus(USART1,USART_IT_RXNE) )					//如果是接收中断
 	{
 		USART_ClearITPendingBit(USART1,USART_IT_RXNE);
 		com_data = USART1->DR;
-		Usart1_DataPrepare(com_data);
+		Usart1_DataPrepare(com_data);												//数据解析
 
 	}
-
-	
-
-
-
 }
 
 
@@ -140,10 +135,9 @@ void Usart2_Init(u32 br_num)
 	GPIO_InitTypeDef GPIO_InitStructure;
 	DMA_InitTypeDef DMA_InitStructure;
 	
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE); //??USART2??
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD,ENABLE);	
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1,ENABLE);
-	//???????
 	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
@@ -153,49 +147,40 @@ void Usart2_Init(u32 br_num)
 	GPIO_PinAFConfig(GPIOD, GPIO_PinSource5, GPIO_AF_USART2);
   GPIO_PinAFConfig(GPIOD, GPIO_PinSource6, GPIO_AF_USART2);
 	
-	//??PD5??USART2 Tx
+
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5; 
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP ;
   GPIO_Init(GPIOD, &GPIO_InitStructure); 
-	//??PD6??USART2 Rx
+
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 ; 
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
   GPIO_Init(GPIOD, &GPIO_InitStructure); 
-	
-	//??USART2
-	//??????
-	USART_InitStructure.USART_BaudRate = br_num;       //????????????
-	USART_InitStructure.USART_WordLength = USART_WordLength_8b;  //8???
-	USART_InitStructure.USART_StopBits = USART_StopBits_1;   //??????1????
-	USART_InitStructure.USART_Parity = USART_Parity_No;    //??????
-	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None; //???????
-	USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;  //???????
-	//??USART2??
-	USART_ClockInitStruct.USART_Clock = USART_Clock_Disable;  //???????
-	USART_ClockInitStruct.USART_CPOL = USART_CPOL_Low;  //SLCK??????????->???
-	USART_ClockInitStruct.USART_CPHA = USART_CPHA_2Edge;  //?????????????
-	USART_ClockInitStruct.USART_LastBit = USART_LastBit_Disable; //?????????????SCLK??
+
+	USART_InitStructure.USART_BaudRate = br_num;     
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b; 
+	USART_InitStructure.USART_StopBits = USART_StopBits_1; 
+	USART_InitStructure.USART_Parity = USART_Parity_No; 
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None; 
+	USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx; 
+	USART_ClockInitStruct.USART_Clock = USART_Clock_Disable; 
+	USART_ClockInitStruct.USART_CPOL = USART_CPOL_Low;
+	USART_ClockInitStruct.USART_CPHA = USART_CPHA_2Edge; 
+	USART_ClockInitStruct.USART_LastBit = USART_LastBit_Disable;
 	
 	USART_Init(USART2, &USART_InitStructure);
 	USART_ClockInit(USART2, &USART_ClockInitStruct);
 
-	//??USART2????
 	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
-	//??USART2
 	USART_Cmd(USART2, ENABLE); 
 	USART_DMACmd(USART2,USART_DMAReq_Tx,ENABLE);
-//	//????(????)??
-//	if(!(USART2->CR1 & USART_CR1_TXEIE))
-//	{
-//		USART_ITConfig(USART2, USART_IT_TXE, ENABLE); 
-//	}
-DMA_DeInit(DMA1_Stream6);
+
+	DMA_DeInit(DMA1_Stream6);
 	
 	while (DMA_GetCmdStatus(DMA1_Stream6) != DISABLE){}//等待DMA可配置 
 	
@@ -223,29 +208,16 @@ DMA_DeInit(DMA1_Stream6);
 void USART2_IRQHandler(void)
 {
 	u8 com_data;
-		if(USART2->SR & USART_SR_ORE)//ORE??
+		if(USART2->SR & USART_SR_ORE)
 	{
 		com_data = USART2->DR;
 	}
-	if( USART_GetITStatus(USART2,USART_IT_RXNE) )
+	if( USART_GetITStatus(USART2,USART_IT_RXNE) )				//接收中断
 	{
-		USART_ClearITPendingBit(USART2,USART_IT_RXNE);//??????
-	//	GPIO_ToggleBits(GPIOA,GPIO_Pin_5);
+		USART_ClearITPendingBit(USART2,USART_IT_RXNE);
 		com_data = USART2->DR;
-		Usart2_DataPrepare(com_data);
+		Usart2_DataPrepare(com_data);											//数据解析
 	}
-
-//	if( USART_GetITStatus(USART2,USART_IT_TXE ) )
-//	{
-//		USART2->DR = Tx2Buffer[Tx2Counter++]; //?DR??????
-//        
-//		if(Tx2Counter == count2)
-//		{
-//			USART2->CR1 &= ~USART_CR1_TXEIE;		//??TXE(????)??
-//		}
-//	}
-//	               //开启DMA传输 
-
 
 }
 
