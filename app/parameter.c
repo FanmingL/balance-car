@@ -16,7 +16,7 @@ _PID_val_st PitchP_val;
 #define SpeedPitch_I 0.0f
 #define SpeedPitch_D 0.0f
 #define Chassis_P 1.5f
-#define Chassis_I 16.0f
+#define Chassis_I 30.0f
 #define Chassis_D 0.0f
 union _Pid_un_ pid_un;
 
